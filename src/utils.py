@@ -8,7 +8,12 @@ def store_secret(client, secret_id, user_id, password):
         client.create_secret(Name=secret_id, SecretString=secret_string)
         print("Secret saved.")
     except ClientError as error:
-        exception_handler(error, secret_id)
+        if error.response["Error"]["Code"] == "InvalidRequestException":
+            print(
+                f"To reuse identifier: {secret_id}, please try again in a few moments."
+            )
+        else:
+            exception_handler(error, secret_id)
 
 
 def list_secrets(client):
