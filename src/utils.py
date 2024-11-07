@@ -20,7 +20,11 @@ def list_secrets(client):
         response = client.list_secrets()
 
         num_secrets = len(response["SecretList"])
+        secret_ids = [secret["Name"] for secret in response["SecretList"]]
 
         print(f"{num_secrets} secret(s) available")
+        if secret_ids:
+            print(f"{(", ".join(secret_ids))}")
     except ClientError as error:
-        raise
+        print(f"Internal error. Please try again in a few moments.")
+        raise error

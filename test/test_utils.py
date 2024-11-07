@@ -61,3 +61,21 @@ class TestListSecrets:
         captured = capsys.readouterr()
         # Assert
         assert captured.out == "0 secret(s) available\n"
+
+    def test_displays_number_of_secrets_with_secret_ids(
+        self, mock_secretsmanager, capsys
+    ):
+        # Arrange
+        test_secret_id = "Top_Secret_Secret"
+        test_user_id = "Secret User"
+        test_password = "Secret password"
+
+        with capsys.disabled():
+            store_secret(
+                mock_secretsmanager, test_secret_id, test_user_id, test_password
+            )
+        # Act
+        list_secrets(mock_secretsmanager)
+        captured = capsys.readouterr()
+        # Assert
+        assert captured.out == "1 secret(s) available\nTop_Secret_Secret\n"
