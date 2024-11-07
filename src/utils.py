@@ -68,3 +68,7 @@ def exception_handler(error, secret_id=None):
         case default:
             print(f"Internal error. Please try again in a few moments.")
             raise error
+
+
+def is_input_empty(input):
+    return not input
