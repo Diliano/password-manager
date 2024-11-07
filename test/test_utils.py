@@ -1,4 +1,4 @@
-from src.utils import store_secret, list_secrets
+from src.utils import store_secret, list_secrets, retrieve_secret
 import pytest
 from moto import mock_aws
 import os
@@ -96,3 +96,22 @@ class TestListSecrets:
             captured.out
             == "2 secret(s) available\nTop_Secret_Secret, Even_More_Top_Secret_Secret\n"
         )
+
+
+class TestRetrieveSecret:
+    def test_retrieves_secret_writes_to_file(self, mock_secretsmanager, capsys):
+        # Arrange
+        test_secret_id = "Top_Secret_Secret"
+        test_user_id = "Secret User"
+        test_password = "Secret password"
+
+        store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
+        ignored_output = capsys.readouterr()
+        # Act
+        retrieve_secret(mock_secretsmanager, test_secret_id)
+        captured = capsys.readouterr()
+        # Assert
+        assert captured.out == "Secret stored in local file: secret.txt\n"
+
+        with open("./secret.txt") as f:
+            assert f.read() == "User ID: Secret User, Password: Secret password"
