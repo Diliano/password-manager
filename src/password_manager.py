@@ -1,5 +1,11 @@
 import boto3
-from src.utils import store_secret, list_secrets, retrieve_secret, delete_secret
+from src.utils import (
+    store_secret,
+    list_secrets,
+    retrieve_secret,
+    delete_secret,
+    is_input_empty,
+)
 
 
 def run_password_manager():
@@ -9,6 +15,10 @@ def run_password_manager():
         choice = input(
             "\n> Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: "
         )
+
+        if is_input_empty(choice):
+            print("\n⚠️ Invalid input.")
+            continue
 
         if choice not in {"e", "r", "d", "l", "x"}:
             print("\n⚠️ Invalid input.")
