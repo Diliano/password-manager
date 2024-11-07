@@ -21,23 +21,24 @@ def mock_secretsmanager(aws_credentials):
 
 
 class TestStoreSecret:
-    def test_stores_secret_in_secretsmanager(self, mock_secretsmanager):
+    def test_stores_secret_in_secretsmanager(self, mock_secretsmanager, capsys):
         # Arrange
         test_secret_id = "Top_Secret_Secret"
         test_user_id = "Secret User"
         test_password = "Secret password"
         # Act
-        result = store_secret(
-            mock_secretsmanager, test_secret_id, test_user_id, test_password
-        )
+        store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
+
+        captured = capsys.readouterr()
+
         response = mock_secretsmanager.list_secrets()
         # Assert
-        assert result == "Secret saved."
+        assert captured.out == "Secret saved.\n"
 
         assert response["SecretList"][0]["Name"] == test_secret_id
 
     def test_provides_informative_message_if_secret_id_already_exists(
-        self, mock_secretsmanager
+        self, mock_secretsmanager, capsys
     ):
         # Arrange
         test_secret_id = "Top_Secret_Secret"
@@ -45,8 +46,9 @@ class TestStoreSecret:
         test_password = "Secret password"
         # Act
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
-        result = store_secret(
-            mock_secretsmanager, test_secret_id, test_user_id, test_password
-        )
+        captured = capsys.readouterr()
+
+        store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
+        captured = capsys.readouterr()
         # Assert
-        assert result == "Secret identifier already exists: Top_Secret_Secret"
+        assert captured.out == "Secret identifier already exists: Top_Secret_Secret\n"
