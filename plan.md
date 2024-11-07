@@ -1,6 +1,6 @@
 # AWS-Powered Password Manager
 
-In this sprint, you will create a simple command-line application to store and retrieve passwords. The passwords will be stored in AWS Secrets Manager. Accessing your AWS account (with your Access Key ID and Secret Key) will be considered sufficient authorisation to retrieve the passwords.
+AWS-Powered Password Manager is a simple command-line application to store and retrieve passwords. The passwords will be stored in AWS Secrets Manager. Accessing your AWS account (with your Access Key ID and Secret Key) will be considered sufficient authorisation to retrieve the passwords.
 
 ## Outline
 
