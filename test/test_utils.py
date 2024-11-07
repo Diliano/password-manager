@@ -1,4 +1,4 @@
-from src.utils import store_secret, list_secrets, retrieve_secret
+from src.utils import store_secret, list_secrets, retrieve_secret, delete_secret
 import pytest
 from moto import mock_aws
 import os
@@ -124,3 +124,28 @@ class TestRetrieveSecret:
         captured = capsys.readouterr()
         # Assert
         assert captured.out == "Invalid secret identifier: Not_A_Real_Secret\n"
+
+
+class TestDeleteSecret:
+    def test_deletes_secret(self, mock_secretsmanager, capsys):
+        # Arrange
+        test_secret_id = "Top_Secret_Secret"
+        test_user_id = "Secret User"
+        test_password = "Secret password"
+
+        store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
+        ignored_output = capsys.readouterr()
+        # Act
+        num_secrets_before_delete = len(
+            mock_secretsmanager.list_secrets()["SecretList"]
+        )
+
+        delete_secret(mock_secretsmanager, test_secret_id)
+        captured = capsys.readouterr()
+
+        num_secrets_after_delete = len(mock_secretsmanager.list_secrets()["SecretList"])
+        # Assert
+        assert captured.out == "Deleted secret with identifier: Top_Secret_Secret\n"
+
+        assert num_secrets_before_delete == 1
+        assert num_secrets_after_delete == 0

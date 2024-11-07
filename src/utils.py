@@ -48,3 +48,11 @@ def retrieve_secret(client, secret_id):
         else:
             print(f"Internal error. Please try again in a few moments.")
             raise error
+
+
+def delete_secret(client, secret_id):
+    try:
+        client.delete_secret(SecretId=secret_id, ForceDeleteWithoutRecovery=True)
+        print(f"Deleted secret with identifier: {secret_id}")
+    except ClientError as error:
+        raise error
