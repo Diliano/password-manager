@@ -53,10 +53,13 @@ def delete_secret(client, secret_id):
 
 
 def exception_handler(error, secret_id=None):
-    if error.response["Error"]["Code"] == "ResourceExistsException":
-        print(f"Secret identifier already exists: {secret_id}")
-    elif error.response["Error"]["Code"] == "ResourceNotFoundException":
-        print(f"Invalid secret identifier: {secret_id}")
-    else:
-        print(f"Internal error. Please try again in a few moments.")
-        raise error
+    error_code = error.response["Error"]["Code"]
+
+    match error_code:
+        case "ResourceExistsException":
+            print(f"Secret identifier already exists: {secret_id}")
+        case "ResourceNotFoundException":
+            print(f"Invalid secret identifier: {secret_id}")
+        case default:
+            print(f"Internal error. Please try again in a few moments.")
+            raise error
