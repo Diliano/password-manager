@@ -115,3 +115,12 @@ class TestRetrieveSecret:
 
         with open("./secret.txt") as f:
             assert f.read() == "User ID: Secret User, Password: Secret password"
+
+    def test_provides_informative_message_if_secret_id_does_not_exist(
+        self, mock_secretsmanager, capsys
+    ):
+        # Act
+        retrieve_secret(mock_secretsmanager, "Not_A_Real_Secret")
+        captured = capsys.readouterr()
+        # Assert
+        assert captured.out == "Invalid secret identifier: Not_A_Real_Secret\n"

@@ -43,4 +43,8 @@ def retrieve_secret(client, secret_id):
 
         print("Secret stored in local file: secret.txt")
     except ClientError as error:
-        pass
+        if error.response["Error"]["Code"] == "ResourceNotFoundException":
+            print(f"Invalid secret identifier: {secret_id}")
+        else:
+            print(f"Internal error. Please try again in a few moments.")
+            raise error
