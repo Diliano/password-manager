@@ -13,3 +13,14 @@ def store_secret(client, secret_id, user_id, password):
         else:
             print(f"Internal error. Please try again in a few moments.")
             raise error
+
+
+def list_secrets(client):
+    try:
+        response = client.list_secrets()
+
+        num_secrets = len(response["SecretList"])
+
+        print(f"{num_secrets} secret(s) available")
+    except ClientError as error:
+        raise

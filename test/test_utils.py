@@ -1,4 +1,4 @@
-from src.utils import store_secret
+from src.utils import store_secret, list_secrets
 import pytest
 from moto import mock_aws
 import os
@@ -52,3 +52,12 @@ class TestStoreSecret:
         captured = capsys.readouterr()
         # Assert
         assert captured.out == "Secret identifier already exists: Top_Secret_Secret\n"
+
+
+class TestListSecrets:
+    def test_confirms_if_there_are_no_secrets_stored(self, mock_secretsmanager, capsys):
+        # Act
+        list_secrets(mock_secretsmanager)
+        captured = capsys.readouterr()
+        # Assert
+        assert captured.out == "0 secret(s) available\n"
