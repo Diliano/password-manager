@@ -52,7 +52,14 @@ def retrieve_secret(client, secret_id):
 
 def delete_secret(client, secret_id):
     try:
+        # workaround for moto quirk that does not raise ResourceNotFoundException
+        client.describe_secret(SecretId=secret_id)
+
         client.delete_secret(SecretId=secret_id, ForceDeleteWithoutRecovery=True)
         print(f"Deleted secret with identifier: {secret_id}")
     except ClientError as error:
-        raise error
+        if error.response["Error"]["Code"] == "ResourceNotFoundException":
+            print(f"Invalid secret identifier: {secret_id}")
+        else:
+            print(f"Internal error. Please try again in a few moments.")
+            raise error

@@ -149,3 +149,12 @@ class TestDeleteSecret:
 
         assert num_secrets_before_delete == 1
         assert num_secrets_after_delete == 0
+
+    def test_provides_message_if_secret_id_does_not_exist(
+        self, mock_secretsmanager, capsys
+    ):
+        # Act
+        delete_secret(mock_secretsmanager, "Not_A_Real_Secret")
+        captured = capsys.readouterr()
+        # Assert
+        assert captured.out == "Invalid secret identifier: Not_A_Real_Secret\n"
