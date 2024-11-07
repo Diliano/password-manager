@@ -8,4 +8,7 @@ def store_secret(client, secret_id, user_id, password):
         client.create_secret(Name=secret_id, SecretString=secret_string)
         return "Secret saved."
     except ClientError as error:
-        raise error
+        if error.response["Error"]["Code"] == "ResourceExistsException":
+            return f"Secret identifier already exists: {secret_id}"
+        else:
+            raise error
