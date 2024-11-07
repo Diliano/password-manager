@@ -8,11 +8,7 @@ def store_secret(client, secret_id, user_id, password):
         client.create_secret(Name=secret_id, SecretString=secret_string)
         print("Secret saved.")
     except ClientError as error:
-        if error.response["Error"]["Code"] == "ResourceExistsException":
-            print(f"Secret identifier already exists: {secret_id}")
-        else:
-            print(f"Internal error. Please try again in a few moments.")
-            raise error
+        exception_handler(error, secret_id)
 
 
 def list_secrets(client):
@@ -26,8 +22,7 @@ def list_secrets(client):
         if secret_ids:
             print(f"{(", ".join(secret_ids))}")
     except ClientError as error:
-        print(f"Internal error. Please try again in a few moments.")
-        raise error
+        exception_handler(error)
 
 
 def retrieve_secret(client, secret_id):
@@ -43,11 +38,7 @@ def retrieve_secret(client, secret_id):
 
         print("Secret stored in local file: secret.txt")
     except ClientError as error:
-        if error.response["Error"]["Code"] == "ResourceNotFoundException":
-            print(f"Invalid secret identifier: {secret_id}")
-        else:
-            print(f"Internal error. Please try again in a few moments.")
-            raise error
+        exception_handler(error, secret_id)
 
 
 def delete_secret(client, secret_id):
@@ -58,8 +49,14 @@ def delete_secret(client, secret_id):
         client.delete_secret(SecretId=secret_id, ForceDeleteWithoutRecovery=True)
         print(f"Deleted secret with identifier: {secret_id}")
     except ClientError as error:
-        if error.response["Error"]["Code"] == "ResourceNotFoundException":
-            print(f"Invalid secret identifier: {secret_id}")
-        else:
-            print(f"Internal error. Please try again in a few moments.")
-            raise error
+        exception_handler(error, secret_id)
+
+
+def exception_handler(error, secret_id=None):
+    if error.response["Error"]["Code"] == "ResourceExistsException":
+        print(f"Secret identifier already exists: {secret_id}")
+    elif error.response["Error"]["Code"] == "ResourceNotFoundException":
+        print(f"Invalid secret identifier: {secret_id}")
+    else:
+        print(f"Internal error. Please try again in a few moments.")
+        raise error
