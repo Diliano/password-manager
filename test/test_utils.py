@@ -46,7 +46,7 @@ class TestStoreSecret:
         test_password = "Secret password"
         # Act
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
-        captured = capsys.readouterr()
+        ignored_output = capsys.readouterr()
 
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
         captured = capsys.readouterr()
@@ -70,10 +70,8 @@ class TestListSecrets:
         test_user_id = "Secret User"
         test_password = "Secret password"
 
-        with capsys.disabled():
-            store_secret(
-                mock_secretsmanager, test_secret_id, test_user_id, test_password
-            )
+        store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
+        ignored_output = capsys.readouterr()
         # Act
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
@@ -87,13 +85,9 @@ class TestListSecrets:
         test_user_id = "Secret User"
         test_password = "Secret password"
 
-        with capsys.disabled():
-            store_secret(
-                mock_secretsmanager, test_secret_id, test_user_id, test_password
-            )
-            store_secret(
-                mock_secretsmanager, test_secret_id_2, test_user_id, test_password
-            )
+        store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
+        store_secret(mock_secretsmanager, test_secret_id_2, test_user_id, test_password)
+        ignored_output = capsys.readouterr()
         # Act
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
