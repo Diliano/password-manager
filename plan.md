@@ -105,4 +105,4 @@ Password: Pa55word
 
 - integration testing
 
-- possible errors: invalid user input (invalid selection or no input), any errors from the utility functions
+- possible errors: invalid user input (invalid selection, no input, non alphanumeric/hyphens/underscores for secret_id), any errors from the utility functions
