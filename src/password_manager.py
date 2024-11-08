@@ -64,6 +64,24 @@ def run_password_manager():
             except:
                 continue
 
+        # retrieve secret functionality
+        if choice == "r":
+            while True:
+                secret_id = input("\n> Secret identifier: ")
+                if is_valid_secret_id(secret_id):
+                    break
+                else:
+                    print(
+                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted"
+                    )
+                    continue
+
+            try:
+                retrieve_secret(secretsmanager_client, secret_id)
+                continue
+            except:
+                continue
+
         # exit interface
         if choice == "x":
             print("\nThank you. Goodbye")
