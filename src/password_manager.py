@@ -82,6 +82,24 @@ def run_password_manager():
             except:
                 continue
 
+        # delete secret functionality
+        if choice == "d":
+            while True:
+                secret_id = input("\n> Secret identifier: ")
+                if is_valid_secret_id(secret_id):
+                    break
+                else:
+                    print(
+                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted"
+                    )
+                    continue
+
+            try:
+                delete_secret(secretsmanager_client, secret_id)
+                continue
+            except:
+                continue
+
         # exit interface
         if choice == "x":
             print("\nThank you. Goodbye")
