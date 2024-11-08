@@ -1,5 +1,6 @@
 import json
 from botocore.exceptions import ClientError
+import re
 
 
 def store_secret(client, secret_id, user_id, password):
@@ -23,9 +24,9 @@ def list_secrets(client):
         num_secrets = len(response["SecretList"])
         secret_ids = [secret["Name"] for secret in response["SecretList"]]
 
-        print(f"{num_secrets} secret(s) available")
+        print(f"\n✓ {num_secrets} secret(s) available")
         if secret_ids:
-            print(f"{(", ".join(secret_ids))}")
+            print(f"\n✓ {(", ".join(secret_ids))}")
     except ClientError as error:
         exception_handler(error)
 
@@ -41,7 +42,7 @@ def retrieve_secret(client, secret_id):
         with open("./secret.txt", "w") as f:
             f.write(f"User ID: {user_id}, Password: {password}")
 
-        print("Secret stored in local file: secret.txt")
+        print("\n✓ Secret stored in local file: secret.txt")
     except ClientError as error:
         exception_handler(error, secret_id)
 
@@ -52,7 +53,7 @@ def delete_secret(client, secret_id):
         client.describe_secret(SecretId=secret_id)
 
         client.delete_secret(SecretId=secret_id, ForceDeleteWithoutRecovery=True)
-        print(f"Deleted secret with identifier: {secret_id}")
+        print(f"\n✓ Deleted secret with identifier: {secret_id}")
     except ClientError as error:
         exception_handler(error, secret_id)
 
@@ -62,11 +63,11 @@ def exception_handler(error, secret_id=None):
 
     match error_code:
         case "ResourceExistsException":
-            print(f"Secret identifier already exists: {secret_id}")
+            print(f"\n⚠️ Secret identifier already exists: {secret_id}")
         case "ResourceNotFoundException":
-            print(f"Invalid secret identifier: {secret_id}")
+            print(f"\n⚠️ Invalid secret identifier: {secret_id}")
         case default:
-            print(f"Internal error. Please try again in a few moments.")
+            print(f"\n⚠️ Internal error. Please try again in a few moments.")
             raise error
 
 

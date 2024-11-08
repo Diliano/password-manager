@@ -1,4 +1,9 @@
-from src.utils import store_secret, list_secrets, retrieve_secret, delete_secret
+from src.utils import (
+    store_secret,
+    list_secrets,
+    retrieve_secret,
+    delete_secret,
+)
 import pytest
 from moto import mock_aws
 import os
@@ -33,7 +38,7 @@ class TestStoreSecret:
 
         response = mock_secretsmanager.list_secrets()
         # Assert
-        assert captured.out == "Secret saved.\n"
+        assert captured.out == "\n✓ Secret saved.\n"
 
         assert response["SecretList"][0]["Name"] == test_secret_id
 
@@ -51,7 +56,9 @@ class TestStoreSecret:
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
         captured = capsys.readouterr()
         # Assert
-        assert captured.out == "Secret identifier already exists: Top_Secret_Secret\n"
+        assert (
+            captured.out == "\n⚠️ Secret identifier already exists: Top_Secret_Secret\n"
+        )
 
 
 class TestListSecrets:
@@ -60,7 +67,7 @@ class TestListSecrets:
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
         # Assert
-        assert captured.out == "0 secret(s) available\n"
+        assert captured.out == "\n✓ 0 secret(s) available\n"
 
     def test_displays_number_of_secrets_with_secret_ids(
         self, mock_secretsmanager, capsys
@@ -76,7 +83,7 @@ class TestListSecrets:
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
         # Assert
-        assert captured.out == "1 secret(s) available\nTop_Secret_Secret\n"
+        assert captured.out == "\n✓ 1 secret(s) available\n\n✓ Top_Secret_Secret\n"
 
     def test_handles_multiple_stored_secrets(self, mock_secretsmanager, capsys):
         # Arrange
@@ -94,7 +101,7 @@ class TestListSecrets:
         # Assert
         assert (
             captured.out
-            == "2 secret(s) available\nTop_Secret_Secret, Even_More_Top_Secret_Secret\n"
+            == "\n✓ 2 secret(s) available\n\n✓ Top_Secret_Secret, Even_More_Top_Secret_Secret\n"
         )
 
 
@@ -111,7 +118,7 @@ class TestRetrieveSecret:
         retrieve_secret(mock_secretsmanager, test_secret_id)
         captured = capsys.readouterr()
         # Assert
-        assert captured.out == "Secret stored in local file: secret.txt\n"
+        assert captured.out == "\n✓ Secret stored in local file: secret.txt\n"
 
         with open("./secret.txt") as f:
             assert f.read() == "User ID: Secret User, Password: Secret password"
@@ -123,7 +130,7 @@ class TestRetrieveSecret:
         retrieve_secret(mock_secretsmanager, "Not_A_Real_Secret")
         captured = capsys.readouterr()
         # Assert
-        assert captured.out == "Invalid secret identifier: Not_A_Real_Secret\n"
+        assert captured.out == "\n⚠️ Invalid secret identifier: Not_A_Real_Secret\n"
 
 
 class TestDeleteSecret:
@@ -145,7 +152,7 @@ class TestDeleteSecret:
 
         num_secrets_after_delete = len(mock_secretsmanager.list_secrets()["SecretList"])
         # Assert
-        assert captured.out == "Deleted secret with identifier: Top_Secret_Secret\n"
+        assert captured.out == "\n✓ Deleted secret with identifier: Top_Secret_Secret\n"
 
         assert num_secrets_before_delete == 1
         assert num_secrets_after_delete == 0
@@ -157,4 +164,4 @@ class TestDeleteSecret:
         delete_secret(mock_secretsmanager, "Not_A_Real_Secret")
         captured = capsys.readouterr()
         # Assert
-        assert captured.out == "Invalid secret identifier: Not_A_Real_Secret\n"
+        assert captured.out == "\n⚠️ Invalid secret identifier: Not_A_Real_Secret\n"
