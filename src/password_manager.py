@@ -14,7 +14,7 @@ def run_password_manager():
     while True:
         # menu interface
         choice = input(
-            "\n> Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: "
+            "\n> Please specify [e]ntry, [l]isting, [r]etrieval, [d]eletion or e[x]it: "
         )
 
         # menu choice validation
