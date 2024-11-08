@@ -3,6 +3,7 @@ from src.utils import (
     list_secrets,
     retrieve_secret,
     delete_secret,
+    is_valid_secret_id,
 )
 import pytest
 from moto import mock_aws
@@ -165,3 +166,35 @@ class TestDeleteSecret:
         captured = capsys.readouterr()
         # Assert
         assert captured.out == "\n⚠️ Invalid secret identifier: Not_A_Real_Secret\n"
+
+
+class TestIsValidSecretId:
+    def test_confirms_a_valid_secret_id(self):
+        # Arrange
+        test_input = "Top_Secret_Secret"
+        # Act
+        result = is_valid_secret_id(test_input)
+        # Assert
+        assert result is True
+
+        # Arrange
+        test_input = "secret-101"
+        # Act
+        result = is_valid_secret_id(test_input)
+        # Assert
+        assert result is True
+
+    def test_confirms_if_invalid_secret_id(self):
+        # Arrange
+        test_input = "Top_Secret?"
+        # Act
+        result = is_valid_secret_id(test_input)
+        # Assert
+        assert result is False
+
+        # Arrange
+        test_input = ""
+        # Act
+        result = is_valid_secret_id(test_input)
+        # Assert
+        assert result is False
