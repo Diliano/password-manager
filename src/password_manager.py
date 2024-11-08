@@ -4,6 +4,7 @@ from src.utils import (
     list_secrets,
     retrieve_secret,
     delete_secret,
+    is_valid_secret_id,
 )
 
 
@@ -22,6 +23,39 @@ def run_password_manager():
         if choice not in {"e", "r", "d", "l", "x"}:
             print("\n⚠️ Invalid input.")
             continue
+
+        if choice == "e":
+            while True:
+                secret_id = input("\n> Secret identifier: ")
+                if is_valid_secret_id(secret_id):
+                    break
+                else:
+                    print(
+                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted"
+                    )
+                    continue
+
+            while True:
+                user_id = input("\n> User ID: ")
+                if user_id:
+                    break
+                else:
+                    print("\n⚠️ Invalid input.")
+                    continue
+
+            while True:
+                password = input("\n> Password: ")
+                if password:
+                    break
+                else:
+                    print("\n⚠️ Invalid input.")
+                    continue
+
+            try:
+                store_secret(secretsmanager_client, secret_id, user_id, password)
+                continue
+            except:
+                continue
 
         if choice == "x":
             print("\nThank you. Goodbye")
