@@ -65,7 +65,7 @@ def exception_handler(error, secret_id=None):
         case "ResourceExistsException":
             print(f"\n⚠️ Secret identifier already exists: {secret_id}")
         case "ResourceNotFoundException":
-            print(f"\n⚠️ Invalid secret identifier: {secret_id}")
+            print(f"\n⚠️ No secret found with identifier: {secret_id}")
         case default:
             print(f"\n⚠️ Internal error. Please try again in a few moments.")
             raise error

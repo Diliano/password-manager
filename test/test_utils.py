@@ -131,7 +131,9 @@ class TestRetrieveSecret:
         retrieve_secret(mock_secretsmanager, "Not_A_Real_Secret")
         captured = capsys.readouterr()
         # Assert
-        assert captured.out == "\n⚠️ Invalid secret identifier: Not_A_Real_Secret\n"
+        assert (
+            captured.out == "\n⚠️ No secret found with identifier: Not_A_Real_Secret\n"
+        )
 
 
 class TestDeleteSecret:
@@ -165,7 +167,9 @@ class TestDeleteSecret:
         delete_secret(mock_secretsmanager, "Not_A_Real_Secret")
         captured = capsys.readouterr()
         # Assert
-        assert captured.out == "\n⚠️ Invalid secret identifier: Not_A_Real_Secret\n"
+        assert (
+            captured.out == "\n⚠️ No secret found with identifier: Not_A_Real_Secret\n"
+        )
 
 
 class TestIsValidSecretId:
