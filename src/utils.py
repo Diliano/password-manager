@@ -71,10 +71,6 @@ def exception_handler(error, secret_id=None):
             raise error
 
 
-def is_input_empty(input):
-    return not input
-
-
 def is_valid_secret_id(secret_id):
     regex = re.compile(r"^[\w-]+$")
     if regex.search(secret_id):

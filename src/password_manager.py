@@ -4,7 +4,6 @@ from src.utils import (
     list_secrets,
     retrieve_secret,
     delete_secret,
-    is_input_empty,
 )
 
 
@@ -16,7 +15,7 @@ def run_password_manager():
             "\n> Please specify [e]ntry, [r]etrieval, [d]eletion, [l]isting or e[x]it: "
         )
 
-        if is_input_empty(choice):
+        if not choice:
             print("\n⚠️ Invalid input.")
             continue
 
