@@ -56,6 +56,14 @@ def run_password_manager():
             except:
                 continue
 
+        # list secrets functionality
+        if choice == "l":
+            try:
+                list_secrets(secretsmanager_client)
+                continue
+            except:
+                continue
+
         # exit interface
         if choice == "x":
             print("\nThank you. Goodbye")
