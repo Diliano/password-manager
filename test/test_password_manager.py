@@ -82,3 +82,34 @@ def test_empty_input(mock_secretsmanager, capsys, monkeypatch):
     output = captured.out
     # Assert
     assert "⚠️ Invalid input." in output
+
+
+def test_invalid_secret_id_input(mock_secretsmanager, capsys, monkeypatch):
+    # Arrange
+    user_inputs = iter(
+        [
+            "e",  # Choose 'retrieve secret'
+            "Is_This_A_Valid_Secret?",  # Enter an invalid secret identifier ('?' not permitted)
+            "This_Is_A_Valid_Secret",  # Enter a valid secret identifier
+            "Secret User",  # Enter user ID
+            "Secret password",  # Enter password
+            "l",  # Choose 'list secrets'
+            "x",  # Choose 'exit'
+        ]
+    )
+
+    monkeypatch.setattr("builtins.input", lambda input: next(user_inputs))
+    # Act
+    run_password_manager()
+
+    captured = capsys.readouterr()
+    output = captured.out
+    # Assert
+    assert (
+        "⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted (no spaces)"
+        in output
+    )
+
+    # Confirm that the invalid secret identifier was not the one that was stored
+    assert "✓ 1 secret(s) available" in output
+    assert "✓ This_Is_A_Valid_Secret" in output
