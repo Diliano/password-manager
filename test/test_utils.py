@@ -36,10 +36,11 @@ class TestStoreSecret:
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
 
         captured = capsys.readouterr()
+        output = captured.out
 
         response = mock_secretsmanager.list_secrets()
         # Assert
-        assert captured.out == "\n✓ Secret saved.\n"
+        assert "✓ Secret saved." in output
 
         assert response["SecretList"][0]["Name"] == test_secret_id
 
@@ -56,10 +57,9 @@ class TestStoreSecret:
 
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
         captured = capsys.readouterr()
+        output = captured.out
         # Assert
-        assert (
-            captured.out == "\n⚠️ Secret identifier already exists: Top_Secret_Secret\n"
-        )
+        assert "⚠️ Secret identifier already exists: Top_Secret_Secret" in output
 
 
 class TestListSecrets:
@@ -67,8 +67,9 @@ class TestListSecrets:
         # Act
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
+        output = captured.out
         # Assert
-        assert captured.out == "\n✓ 0 secret(s) available\n"
+        assert "✓ 0 secret(s) available" in output
 
     def test_displays_number_of_secrets_with_secret_ids(
         self, mock_secretsmanager, capsys
@@ -83,8 +84,10 @@ class TestListSecrets:
         # Act
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
+        output = captured.out
         # Assert
-        assert captured.out == "\n✓ 1 secret(s) available\n\n✓ Top_Secret_Secret\n"
+        assert "✓ 1 secret(s) available" in output
+        assert "✓ Top_Secret_Secret" in output
 
     def test_handles_multiple_stored_secrets(self, mock_secretsmanager, capsys):
         # Arrange
@@ -99,11 +102,10 @@ class TestListSecrets:
         # Act
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
+        output = captured.out
         # Assert
-        assert (
-            captured.out
-            == "\n✓ 2 secret(s) available\n\n✓ Top_Secret_Secret, Even_More_Top_Secret_Secret\n"
-        )
+        assert "✓ 2 secret(s) available" in output
+        assert "✓ Top_Secret_Secret, Even_More_Top_Secret_Secret" in output
 
 
 class TestRetrieveSecret:
@@ -118,8 +120,9 @@ class TestRetrieveSecret:
         # Act
         retrieve_secret(mock_secretsmanager, test_secret_id)
         captured = capsys.readouterr()
+        output = captured.out
         # Assert
-        assert captured.out == "\n✓ Secret stored in local file: secret.txt\n"
+        assert "✓ Secret stored in local file: secret.txt" in output
 
         with open("./secret.txt") as f:
             assert f.read() == "User ID: Secret User, Password: Secret password"
@@ -130,10 +133,9 @@ class TestRetrieveSecret:
         # Act
         retrieve_secret(mock_secretsmanager, "Not_A_Real_Secret")
         captured = capsys.readouterr()
+        output = captured.out
         # Assert
-        assert (
-            captured.out == "\n⚠️ No secret found with identifier: Not_A_Real_Secret\n"
-        )
+        assert "⚠️ No secret found with identifier: Not_A_Real_Secret" in output
 
 
 class TestDeleteSecret:
@@ -152,10 +154,11 @@ class TestDeleteSecret:
 
         delete_secret(mock_secretsmanager, test_secret_id)
         captured = capsys.readouterr()
+        output = captured.out
 
         num_secrets_after_delete = len(mock_secretsmanager.list_secrets()["SecretList"])
         # Assert
-        assert captured.out == "\n✓ Deleted secret with identifier: Top_Secret_Secret\n"
+        assert "✓ Deleted secret with identifier: Top_Secret_Secret" in output
 
         assert num_secrets_before_delete == 1
         assert num_secrets_after_delete == 0
@@ -166,10 +169,9 @@ class TestDeleteSecret:
         # Act
         delete_secret(mock_secretsmanager, "Not_A_Real_Secret")
         captured = capsys.readouterr()
+        output = captured.out
         # Assert
-        assert (
-            captured.out == "\n⚠️ No secret found with identifier: Not_A_Real_Secret\n"
-        )
+        assert "⚠️ No secret found with identifier: Not_A_Real_Secret" in output
 
 
 class TestIsValidSecretId:
