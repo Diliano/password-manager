@@ -30,7 +30,7 @@ def run_password_manager():
                     break
                 else:
                     print(
-                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted"
+                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted (no spaces)"
                     )
                     continue
 
@@ -72,7 +72,7 @@ def run_password_manager():
                     break
                 else:
                     print(
-                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted"
+                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted (no spaces)"
                     )
                     continue
 
@@ -90,7 +90,7 @@ def run_password_manager():
                     break
                 else:
                     print(
-                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted"
+                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted (no spaces)"
                     )
                     continue
 
