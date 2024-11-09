@@ -1,0 +1,4 @@
+boto3
+moto[secretsmanager]
+pytest
+pytest-cov
