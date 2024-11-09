@@ -113,3 +113,32 @@ def test_invalid_secret_id_input(mock_secretsmanager, capsys, monkeypatch):
     # Confirm that the invalid secret identifier was not the one that was stored
     assert "✓ 1 secret(s) available" in output
     assert "✓ This_Is_A_Valid_Secret" in output
+
+
+def test_create_secret_with_duplicate_secret_id(
+    mock_secretsmanager, capsys, monkeypatch
+):
+    # Arrange
+    user_inputs = iter(
+        [
+            "e",  # Choose 'retrieve secret'
+            "Top_Secret_Secret",  # Enter a valid secret identifier
+            "Secret User",  # Enter user ID
+            "Secret password",  # Enter password
+            "e",  # Choose 'list secrets'
+            "Top_Secret_Secret",  # Enter a duplicate secret identifier
+            "New_Secret",
+            "Other Secret User",  # Enter user ID
+            "Other secret password",  # Enter password
+            "x",  # Choose 'exit'
+        ]
+    )
+
+    monkeypatch.setattr("builtins.input", lambda input: next(user_inputs))
+    # Act
+    run_password_manager()
+
+    captured = capsys.readouterr()
+    output = captured.out
+    # Assert
+    assert "⚠️ Secret identifier already exists: Top_Secret_Secret" in output
