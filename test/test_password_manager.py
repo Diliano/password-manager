@@ -68,3 +68,17 @@ def test_invalid_choice_input(mock_secretsmanager, capsys, monkeypatch):
     output = captured.out
     # Assert
     assert "⚠️ Invalid input." in output
+
+
+def test_empty_input(mock_secretsmanager, capsys, monkeypatch):
+    # Arrange
+    user_inputs = iter(["", "x"])  # Enter empty input and then choose 'exit'
+
+    monkeypatch.setattr("builtins.input", lambda input: next(user_inputs))
+    # Act
+    run_password_manager()
+
+    captured = capsys.readouterr()
+    output = captured.out
+    # Assert
+    assert "⚠️ Invalid input." in output
