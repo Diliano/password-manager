@@ -142,3 +142,23 @@ def test_create_secret_with_duplicate_secret_id(
     output = captured.out
     # Assert
     assert "⚠️ Secret identifier already exists: Top_Secret_Secret" in output
+
+
+def test_secret_id_does_not_exist(mock_secretsmanager, capsys, monkeypatch):
+    # Arrange
+    user_inputs = iter(
+        [
+            "r",  # Choose 'retrieve secret'
+            "Top_Secret_Secret",  # Enter a secret identifier
+            "x",  # Choose 'exit'
+        ]
+    )
+
+    monkeypatch.setattr("builtins.input", lambda input: next(user_inputs))
+    # Act
+    run_password_manager()
+
+    captured = capsys.readouterr()
+    output = captured.out
+    # Assert
+    assert "⚠️ No secret found with identifier: Top_Secret_Secret" in output
