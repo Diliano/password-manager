@@ -88,7 +88,7 @@ def test_invalid_secret_id_input(mock_secretsmanager, capsys, monkeypatch):
     # Arrange
     user_inputs = iter(
         [
-            "e",  # Choose 'retrieve secret'
+            "e",  # Choose 'enter secret'
             "Is_This_A_Valid_Secret?",  # Enter an invalid secret identifier ('?' not permitted)
             "This_Is_A_Valid_Secret",  # Enter a valid secret identifier
             "Secret User",  # Enter user ID
@@ -121,13 +121,13 @@ def test_create_secret_with_duplicate_secret_id(
     # Arrange
     user_inputs = iter(
         [
-            "e",  # Choose 'retrieve secret'
+            "e",  # Choose 'enter secret'
             "Top_Secret_Secret",  # Enter a valid secret identifier
             "Secret User",  # Enter user ID
             "Secret password",  # Enter password
-            "e",  # Choose 'list secrets'
+            "e",  # Choose 'enter secret'
             "Top_Secret_Secret",  # Enter a duplicate secret identifier
-            "New_Secret",
+            "New_Secret",  # Enter a unique secret identiifer
             "Other Secret User",  # Enter user ID
             "Other secret password",  # Enter password
             "x",  # Choose 'exit'
