@@ -72,7 +72,18 @@ def test_invalid_choice_input(mock_secretsmanager, capsys, monkeypatch):
 
 def test_empty_input(mock_secretsmanager, capsys, monkeypatch):
     # Arrange
-    user_inputs = iter(["", "x"])  # Enter empty input and then choose 'exit'
+    user_inputs = iter(
+        [
+            "",  # Enter empty input
+            "e",  # Choose 'enter secret'
+            "Top_Secret_Secret",  # Enter secret id
+            "",  # Enter empty input
+            "Secret User",  # Enter user id
+            "",  # Enter empty input
+            "Secret password",  # Enter password
+            "x",  # Choose 'exit'
+        ]
+    )
 
     monkeypatch.setattr("builtins.input", lambda input: next(user_inputs))
     # Act
@@ -81,7 +92,7 @@ def test_empty_input(mock_secretsmanager, capsys, monkeypatch):
     captured = capsys.readouterr()
     output = captured.out
     # Assert
-    assert "⚠️ Invalid input." in output
+    assert output.count("⚠️ Invalid input.") == 3
 
 
 def test_invalid_secret_id_input(mock_secretsmanager, capsys, monkeypatch):
