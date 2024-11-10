@@ -105,6 +105,12 @@ def test_invalid_secret_id_input(mock_secretsmanager, capsys, monkeypatch):
             "Secret User",  # Enter user ID
             "Secret password",  # Enter password
             "l",  # Choose 'list secrets'
+            "r",  # Choose 'retrieve secret'
+            "Is_This_A_Valid_Secret?",  # Enter invalid secret id ('?' not permitted)
+            "This_Is_A_Valid_Secret",  # Enter a valid secret identifier
+            "d",  # Choose 'delete secret'
+            "Is_This_A_Valid_Secret?",  # Enter invalid secret id ('?' not permitted)
+            "This_Is_A_Valid_Secret",  # Enter a valid secret identifier
             "x",  # Choose 'exit'
         ]
     )
@@ -117,8 +123,11 @@ def test_invalid_secret_id_input(mock_secretsmanager, capsys, monkeypatch):
     output = captured.out
     # Assert
     assert (
-        "⚠️ Invalid identifier: letters, numbers, underscores and "
-        "hyphens are permitted (no spaces)" in output
+        output.count(
+            "⚠️ Invalid identifier: letters, numbers, underscores and "
+            "hyphens are permitted (no spaces)"
+        )
+        == 3
     )
 
     # Confirm that the invalid secret identifier was not the one that was stored
