@@ -1,6 +1,5 @@
 venv
 **/.pycache
 **/__pycache__
-pytest.ini
 secret.txt
 .coverage
