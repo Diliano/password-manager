@@ -53,7 +53,7 @@ class TestStoreSecret:
         test_password = "Secret password"
         # Act
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
-        ignored_output = capsys.readouterr()
+        _ = capsys.readouterr()  # ignore output
 
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
         captured = capsys.readouterr()
@@ -80,7 +80,7 @@ class TestListSecrets:
         test_password = "Secret password"
 
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
-        ignored_output = capsys.readouterr()
+        _ = capsys.readouterr()  # ignore output
         # Act
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
@@ -98,7 +98,7 @@ class TestListSecrets:
 
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
         store_secret(mock_secretsmanager, test_secret_id_2, test_user_id, test_password)
-        ignored_output = capsys.readouterr()
+        _ = capsys.readouterr()  # ignore output
         # Act
         list_secrets(mock_secretsmanager)
         captured = capsys.readouterr()
@@ -116,7 +116,7 @@ class TestRetrieveSecret:
         test_password = "Secret password"
 
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
-        ignored_output = capsys.readouterr()
+        _ = capsys.readouterr()  # ignore output
         # Act
         retrieve_secret(mock_secretsmanager, test_secret_id)
         captured = capsys.readouterr()
@@ -146,7 +146,7 @@ class TestDeleteSecret:
         test_password = "Secret password"
 
         store_secret(mock_secretsmanager, test_secret_id, test_user_id, test_password)
-        ignored_output = capsys.readouterr()
+        _ = capsys.readouterr()  # ignore output
         # Act
         num_secrets_before_delete = len(
             mock_secretsmanager.list_secrets()["SecretList"]

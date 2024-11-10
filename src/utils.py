@@ -11,7 +11,8 @@ def store_secret(client, secret_id, user_id, password):
     except ClientError as error:
         if error.response["Error"]["Code"] == "InvalidRequestException":
             print(
-                f"\n⚠️ To reuse identifier: {secret_id}, please try again in a few moments."
+                f"\n⚠️ To reuse identifier: {secret_id}, please try "
+                "again in a few moments."
             )
         else:
             exception_handler(error, secret_id)
@@ -66,8 +67,8 @@ def exception_handler(error, secret_id=None):
             print(f"\n⚠️ Secret identifier already exists: {secret_id}")
         case "ResourceNotFoundException":
             print(f"\n⚠️ No secret found with identifier: {secret_id}")
-        case default:
-            print(f"\n⚠️ Internal error. Please try again in a few moments.")
+        case _:  # default behaviour
+            print("\n⚠️ Internal error. Please try again in a few moments.")
             raise error
 
 

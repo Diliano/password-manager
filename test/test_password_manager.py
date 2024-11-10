@@ -89,7 +89,7 @@ def test_invalid_secret_id_input(mock_secretsmanager, capsys, monkeypatch):
     user_inputs = iter(
         [
             "e",  # Choose 'enter secret'
-            "Is_This_A_Valid_Secret?",  # Enter an invalid secret identifier ('?' not permitted)
+            "Is_This_A_Valid_Secret?",  # Enter invalid secret id ('?' not permitted)
             "This_Is_A_Valid_Secret",  # Enter a valid secret identifier
             "Secret User",  # Enter user ID
             "Secret password",  # Enter password
@@ -106,8 +106,8 @@ def test_invalid_secret_id_input(mock_secretsmanager, capsys, monkeypatch):
     output = captured.out
     # Assert
     assert (
-        "⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted (no spaces)"
-        in output
+        "⚠️ Invalid identifier: letters, numbers, underscores and "
+        "hyphens are permitted (no spaces)" in output
     )
 
     # Confirm that the invalid secret identifier was not the one that was stored

@@ -30,7 +30,8 @@ def run_password_manager():
                     break
                 else:
                     print(
-                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted (no spaces)"
+                        "\n⚠️ Invalid identifier: letters, numbers, underscores and "
+                        "hyphens are permitted (no spaces)"
                     )
                     continue
 
@@ -53,7 +54,7 @@ def run_password_manager():
             try:
                 store_secret(secretsmanager_client, secret_id, user_id, password)
                 continue
-            except:
+            except Exception:
                 continue
 
         # list secrets functionality
@@ -61,7 +62,7 @@ def run_password_manager():
             try:
                 list_secrets(secretsmanager_client)
                 continue
-            except:
+            except Exception:
                 continue
 
         # retrieve secret functionality
@@ -72,14 +73,15 @@ def run_password_manager():
                     break
                 else:
                     print(
-                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted (no spaces)"
+                        "\n⚠️ Invalid identifier: letters, numbers, underscores and "
+                        "hyphens are permitted (no spaces)"
                     )
                     continue
 
             try:
                 retrieve_secret(secretsmanager_client, secret_id)
                 continue
-            except:
+            except Exception:
                 continue
 
         # delete secret functionality
@@ -90,14 +92,15 @@ def run_password_manager():
                     break
                 else:
                     print(
-                        "\n⚠️ Invalid identifier: only letters, numbers, underscores and hyphens are permitted (no spaces)"
+                        "\n⚠️ Invalid identifier: letters, numbers, underscores and "
+                        "hyphens are permitted (no spaces)"
                     )
                     continue
 
             try:
                 delete_secret(secretsmanager_client, secret_id)
                 continue
-            except:
+            except Exception:
                 continue
 
         # exit interface
