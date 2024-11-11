@@ -9,6 +9,7 @@ import pytest
 from moto import mock_aws
 import os
 import boto3
+from botocore.exceptions import ClientError
 
 
 @pytest.fixture(scope="function")
@@ -106,6 +107,22 @@ class TestListSecrets:
         # Assert
         assert "✓ 2 secret(s) available" in output
         assert "✓ Top_Secret_Secret, Even_More_Top_Secret_Secret" in output
+
+    def test_list_secrets_client_error(self, mock_secretsmanager, monkeypatch, capsys):
+        # Arrange
+        error_response = {"Error": {"Code": "InternalServiceError"}}
+        operation_name = "ListSecrets"
+
+        def mock_list_secrets(*args, **kwargs):
+            raise ClientError(error_response, operation_name)
+
+        monkeypatch.setattr(mock_secretsmanager, "list_secrets", mock_list_secrets)
+        # Act
+        list_secrets(mock_secretsmanager)
+        captured = capsys.readouterr()
+        output = captured.out
+        # Assert
+        assert "⚠️ Internal error. Please try again later." in output
 
 
 class TestRetrieveSecret:

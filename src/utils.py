@@ -68,8 +68,7 @@ def exception_handler(error, secret_id=None):
         case "ResourceNotFoundException":
             print(f"\n⚠️ No secret found with identifier: {secret_id}")
         case _:  # default behaviour
-            print("\n⚠️ Internal error. Please try again in a few moments.")
-            raise error
+            print("\n⚠️ Internal error. Please try again later.")
 
 
 def is_valid_secret_id(secret_id):
