@@ -35,6 +35,14 @@ Password Manager provides a command-line interface (CLI) to securely store, retr
 
 ## Setup
 
+### Clone the Repository
+
+To clone the repository to your local machine, run:
+```bash
+git clone https://github.com/Diliano/password-manager.git
+cd password-manager
+```
+
 ### Create Virtual Environment & Install Dependencies
 1. Run the following command to set up the environment:
    ```bash
